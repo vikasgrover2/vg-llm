@@ -1,0 +1,39 @@
+# docker-compose.yml
+version: '3.1'
+services:
+  db:
+    image: postgres:16.0-alpine
+    restart: always
+    environment:
+       - POSTGRES_HOST=${POSTGRES_HOST}
+       - POSTGRES_USER=${POSTGRES_USER}
+       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+       - POSTGRES_DB=${POSTGRES_DB}
+       - POSTGRES_CONTAINER_PORT=${POSTGRES_CONTAINER_PORT}
+       - POSTGRES_HOST_PORT=${POSTGRES_HOST_PORT}
+    ports: 
+      - "${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
+    volumes:
+      - ./.database:/var/lib/postgresql/data
+    container_name: postgres1
+  datascience-notebook:
+    image: jupyter/notebook_with_llm:v1
+    volumes:
+      - ./notebook:/home/jovyan/notebook
+      - ./raw_dataset:/home/jovyan/raw_dataset
+    links:
+      - "db:database"
+    environment:
+       - POSTGRES_HOST=database
+       - POSTGRES_USER=${POSTGRES_USER}
+       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+       - POSTGRES_DB=${POSTGRES_DB}
+       - POSTGRES_CONTAINER_PORT=${POSTGRES_CONTAINER_PORT}
+       - ACTIVELOOP_TOKEN=${ACTIVELOOP_TOKEN}
+       - OPENAI_API_KEY=${OPENAI_API_KEY}
+       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+       - GOOGLE_CSE_ID=${GOOGLE_CSE_ID}
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    container_name: llm
