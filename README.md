@@ -37,4 +37,6 @@ jupyter server list
 ```
 Token will be displayed after '?token='
 
-Use the token to log into the jupyter notebooks. If all the libraries in requirements were installed successfully, all code should run.
+Use the token to log into the jupyter notebooks. Notebooks are in the /notebook directory.
+
+If all the libraries in requirements were installed successfully, all code should run.
