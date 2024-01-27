@@ -1,0 +1,12 @@
+version: 1
+
+models:
+  - name: fta_permits_live
+    description: "fta model for loading live permits data"
+          
+sources:
+  - name: fta_raw
+    database: myapp_db  
+    schema: dbt_raw  
+    tables:
+      - name: fta_permits_live
