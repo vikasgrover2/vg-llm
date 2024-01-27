@@ -1,0 +1,36 @@
+fta_reporting:
+  outputs:
+    dev:
+      dbname: myapp_db
+      host: 
+      pass: 
+      port: 5432
+      schema: dbt_reporting
+      threads: 1
+      type: postgres
+      user: vgrover
+  target: dev
+fta_snapshots:
+  outputs:
+    dev:
+      dbname: myapp_db
+      host: 
+      pass: 
+      port: 5432
+      schema: dbt_snapshots
+      threads: 1
+      type: postgres
+      user: vgrover
+  target: dev
+fta_raw:
+  outputs:
+    dev:
+      dbname: myapp_db
+      host: 
+      pass: 
+      port: 5432
+      schema: dbt_raw
+      threads: 1
+      type: postgres
+      user: vgrover
+  target: dev
