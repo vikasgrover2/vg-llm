@@ -21,6 +21,9 @@ services:
     volumes:
       - ./notebook:/home/jovyan/notebook
       - ./raw_dataset:/home/jovyan/raw_dataset
+      #- ./:/home/jovyan/
+      - ./dbt-proj:/home/jovyan/dbt-proj
+
     links:
       - "db:database"
     environment:
@@ -37,3 +40,5 @@ services:
       - "8888:8888"
       - "4040:4040"
     container_name: llm
+
+
