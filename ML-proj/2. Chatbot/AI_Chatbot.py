@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.title("FOR EX\:GPT4")
+
 def chat_actions():
     st.session_state["chat_history"].append(
         {"role": "user", "content": st.session_state["chat_input"]},
