@@ -1,6 +1,45 @@
+from openai import OpenAI
+import os
+import pandas as pd
+import psycopg2
+import psycopg2.pool
+import psycopg2.extras
+import warnings
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 import streamlit as st
 
+warnings.filterwarnings('ignore')
+postgres_username = os.environ['POSTGRES_USER']
+postgres_password = os.environ['POSTGRES_PASSWORD']
+postgres_host = os.environ['POSTGRES_HOST']
+postgres_port = os.environ['POSTGRES_CONTAINER_PORT']
+postgres_database = os.environ['POSTGRES_DB']
+conn_str = f'postgresql://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_database}'
+PgresEngine = create_engine(conn_str, pool_size=5)
+
+def getconn():   
+    c= PgresEngine.connect()
+    return c
+
+def closeconn(c):
+    c.close()
+
+def closepool():
+    PgresEngine.dispose()  
+
+def get_data_from_db(sql):
+    postgres_connection = getconn()
+    df = pd.read_sql_query(sql=sql,con=postgres_connection)
+    closeconn(postgres_connection)
+    return df
+
+
 st.title("FOR EX\:GPT4")
+schemaname = 'dbt_snapshots'
+tablename = 'fta_weekly_snapshot'
+data = get_data_from_db(f"Select * from {schemaname}.{tablename}")
+colums = ','.join(data.columns)
 
 def chat_actions():
     st.session_state["chat_history"].append(
@@ -17,7 +56,7 @@ def chat_actions():
     else:
         st.session_state["chat_history"].append(
                 {"role": "assistant",
-                    "content": f'Repeating {st.session_state["chat_input"]}',
+                    "content": f'Is there anything else I can help with?',
                 },  
             )
 
